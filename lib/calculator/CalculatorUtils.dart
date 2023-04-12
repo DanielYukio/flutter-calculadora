@@ -1,17 +1,79 @@
 import 'package:flutter/material.dart';
 
-enum Operations { add, subtract, multiply, divide, percent }
-
-class Calculator {
+class Operation {
   late double? n1;
   late double? n2;
-  late double? result;
-  late String? operation;
-  late String displayValue = '0';
+  late String? op;
 
-  Calculator();
+  Operation();
+
+  clear({bool clearAll = false}) {
+    if (clearAll) {
+      n1 = n2 = op = null;
+    } else {
+      n1 = n2;
+      n2 = op = null;
+    }
+  }
+
+  bool get isNotPrepared {
+    return n1 == null || n2 == null || op == null;
+  }
+
+  double? getResult() {
+    if (isNotPrepared) {
+      return null;
+    }
+    late final double? result;
+    switch (op) {
+      case '+':
+        result = n1! + n2!;
+        clear();
+        break;
+
+      case '-':
+        result = n1! - n2!;
+        clear();
+        break;
+
+      case '*':
+        result = n1! * n2!;
+        clear();
+        break;
+
+      case '/':
+        if (n2 == 0) {
+          result = null;
+          clear(clearAll: true);
+        } else {
+          result = n1! / n2!;
+          clear();
+        }
+        break;
+
+      default:
+        result = null;
+        clear(clearAll: true);
+        break;
+    }
+    return result;
+  }
+}
+
+class Calculator {
+  late String displayValue = '0';
+  Operation operation = Operation();
+  bool waitingNewValue = true;
+
+  bool get error {
+    return displayValue == 'ERRO';
+  }
 
   void setValue(String value) {
+    if (error) {
+      displayValue = '0';
+      waitingNewValue = true;
+    }
     if (double.tryParse(value) != null) {
       setNumber(value);
     } else {
@@ -20,25 +82,23 @@ class Calculator {
         case '-':
         case '*':
         case '/':
-        case '%':
           setOperation(value);
           break;
 
+        case '%':
+          displayValue = (double.parse(displayValue) / 100).toString();
+          break;
+
         case '=':
-          setResult();
+          getResult();
           break;
 
         case '+/-':
-          if (double.parse(displayValue) > 0) {
-            displayValue = '-' + displayValue;
-          } else if (double.parse(displayValue) < 0) {
-            displayValue = displayValue.substring(1);
-          } else {
-            return;
-          }
+          toggleSignal();
           break;
 
         case '.':
+          addPoint();
           break;
 
         case 'c':
@@ -56,17 +116,34 @@ class Calculator {
   }
 
   void setNumber(String value) {
-    if (displayValue == '0') {
+    if (displayValue == '0' || waitingNewValue) {
       displayValue = value;
     } else {
       displayValue += value;
     }
+    waitingNewValue = false;
   }
 
-  delete({bool clearAll = false}) {
-    debugPrint(clearAll.toString());
+  void addPoint() {
+    if (!displayValue.contains('.')) {
+      displayValue += '.';
+    }
+    waitingNewValue = false;
+  }
+
+  void toggleSignal() {
+    if (double.parse(displayValue) > 0) {
+      displayValue = '-$displayValue';
+    } else if (double.parse(displayValue) < 0) {
+      displayValue = displayValue.substring(1);
+    }
+    waitingNewValue = false;
+  }
+
+  void delete({bool clearAll = false}) {
     if (clearAll == true) {
       displayValue = '0';
+      operation.clear(clearAll: true);
     } else {
       if ((!displayValue.startsWith('-') && displayValue.length > 1) ||
           (displayValue.startsWith('-') && displayValue.length > 2)) {
@@ -77,28 +154,30 @@ class Calculator {
     }
   }
 
-  void setOperation(String operation) {
-    switch (operation) {
-      case '+':
-        break;
-      case '-':
-        break;
-      case '*':
-        break;
-      case '/':
-        break;
-      case '%':
-        displayValue = (double.parse(displayValue) / 100).toString();
-        break;
+  void setOperation(String op) {
+    if (operation.n1 == null) {
+      operation.n1 = double.parse(displayValue);
+      operation.op = op;
+      waitingNewValue = true;
+    } else {
+      operation.n2 = double.parse(displayValue);
+      if (operation.op == null) {
+        operation.op = op;
+      } else {
+        getResult();
+        operation.op = op;
+      }
     }
   }
 
-  setResult() {}
-
-  parseDouble(String numstring) {}
+  getResult() {
+    operation.n2 ??= double.parse(displayValue);
+    if (operation.isNotPrepared || waitingNewValue) {
+      operation.n2 = null;
+      return;
+    }
+    final double? result = operation.getResult();
+    displayValue = result == null ? 'ERRO' : result.toString();
+    waitingNewValue = true;
+  }
 }
-
-// bool isNumber(String value) {
-//   var a = int.tryParse(value);
-//   return a != null;
-// }

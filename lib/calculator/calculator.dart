@@ -30,7 +30,7 @@ class _CalculatorState extends State<CalculatorState> {
     return Scaffold(
       body: Center(
         child: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.75,
+          width: MediaQuery.of(context).size.width * 0.9,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -38,29 +38,42 @@ class _CalculatorState extends State<CalculatorState> {
                 textAlign: TextAlign.end,
                 decoration: InputDecoration(
                   hintText: calculator.displayValue,
-                  border: OutlineInputBorder(),
+                  border: const OutlineInputBorder(),
                 ),
-                enabled: false,
+                readOnly: true,
+                focusNode: primaryFocus,
               ),
               const SizedBox(height: 16),
-              ...buttons
-                  .map((e) => Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: e
-                            .map(
-                              (e) => ElevatedButton(
-                                autofocus: false,
-                                onPressed: () {
-                                  _setValue(e);
-                                },
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.blue),
-                                child: Text(e),
+              ...buttons.map(
+                (e) => Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: e
+                          .map(
+                            (e) => ElevatedButton(
+                              autofocus: false,
+                              onPressed: () {
+                                _setValue(e);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.blue,
+                                  fixedSize: Size(
+                                    MediaQuery.of(context).size.width * 0.20,
+                                    MediaQuery.of(context).size.height * 0.06,
+                                  )),
+                              child: Text(
+                                e.toUpperCase(),
+                                style: TextStyle(fontSize: 20),
                               ),
-                            )
-                            .toList(),
-                      ))
-                  .toList()
+                            ),
+                          )
+                          .toList(),
+                    ),
+                    const SizedBox(height: 16)
+                  ].toList(),
+                ),
+              ),
             ],
           ),
         ),
