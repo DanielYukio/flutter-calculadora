@@ -63,7 +63,7 @@ class _CalculatorState extends State<CalculatorState> {
                                   )),
                               child: Text(
                                 e.toUpperCase(),
-                                style: TextStyle(fontSize: 20),
+                                style: const TextStyle(fontSize: 20),
                               ),
                             ),
                           )

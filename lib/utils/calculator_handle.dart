@@ -1,4 +1,3 @@
-
 class Operation {
   late double? n1;
   late double? n2;
