@@ -43,24 +43,33 @@ class _CalculatorState extends State<CalculatorState> {
                 enabled: false,
               ),
               const SizedBox(height: 16),
-              ...buttons
-                  .map((e) => Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: e
-                            .map(
-                              (e) => ElevatedButton(
-                                autofocus: false,
-                                onPressed: () {
-                                  _setValue(e);
-                                },
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.blue),
-                                child: Text(e),
-                              ),
-                            )
-                            .toList(),
-                      ))
-                  .toList()
+              ...buttons.map(
+                (e) => Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: e
+                          .map(
+                            (e) => ElevatedButton(
+                              autofocus: false,
+                              onPressed: () {
+                                _setValue(e);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.blue,
+                                  fixedSize: Size(
+                                    MediaQuery.of(context).size.width * 0.15,
+                                    MediaQuery.of(context).size.height * 0.06,
+                                  )),
+                              child: Text(e.toUpperCase()),
+                            ),
+                          )
+                          .toList(),
+                    ),
+                    const SizedBox(height: 16)
+                  ].toList(),
+                ),
+              ),
             ],
           ),
         ),
