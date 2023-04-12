@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'CalculatorUtils.dart';
+import 'calculator_handle.dart';
 
 class CalculatorState extends StatefulWidget {
   const CalculatorState({super.key});
@@ -19,7 +19,7 @@ class _CalculatorState extends State<CalculatorState> {
     ['+/-', '0', '.', '='],
   ];
 
-  _setValue(String value) {
+  _onPressed(String value) {
     setState(() {
       calculator.setValue(value);
     });
@@ -41,7 +41,6 @@ class _CalculatorState extends State<CalculatorState> {
                   border: const OutlineInputBorder(),
                 ),
                 readOnly: true,
-                focusNode: primaryFocus,
               ),
               const SizedBox(height: 16),
               ...buttons.map(
@@ -54,7 +53,7 @@ class _CalculatorState extends State<CalculatorState> {
                             (e) => ElevatedButton(
                               autofocus: false,
                               onPressed: () {
-                                _setValue(e);
+                                _onPressed(e);
                               },
                               style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.blue,

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 
 class Operation {
   late double? n1;
@@ -7,17 +6,12 @@ class Operation {
 
   Operation();
 
-  clear({bool clearAll = false}) {
-    if (clearAll) {
-      n1 = n2 = op = null;
-    } else {
-      n1 = n2;
-      n2 = op = null;
-    }
+  clear() {
+    n1 = n2 = op = null;
   }
 
   bool get isNotPrepared {
-    return n1 == null || n2 == null || op == null;
+    return (n1 == null || n2 == null || op == null);
   }
 
   double? getResult() {
@@ -44,16 +38,15 @@ class Operation {
       case '/':
         if (n2 == 0) {
           result = null;
-          clear(clearAll: true);
         } else {
           result = n1! / n2!;
-          clear();
         }
+        clear();
         break;
 
       default:
         result = null;
-        clear(clearAll: true);
+        clear();
         break;
     }
     return result;
@@ -61,7 +54,7 @@ class Operation {
 }
 
 class Calculator {
-  late String displayValue = '0';
+  String displayValue = '0';
   Operation operation = Operation();
   bool waitingNewValue = true;
 
@@ -143,7 +136,7 @@ class Calculator {
   void delete({bool clearAll = false}) {
     if (clearAll == true) {
       displayValue = '0';
-      operation.clear(clearAll: true);
+      operation.clear();
     } else {
       if ((!displayValue.startsWith('-') && displayValue.length > 1) ||
           (displayValue.startsWith('-') && displayValue.length > 2)) {
@@ -165,6 +158,7 @@ class Calculator {
         operation.op = op;
       } else {
         getResult();
+        operation.n1 = double.parse(displayValue);
         operation.op = op;
       }
     }
