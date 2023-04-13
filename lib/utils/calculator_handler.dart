@@ -1,7 +1,9 @@
+import 'package:flutter/material.dart';
+
 class Operation {
-  late double? n1;
-  late double? n2;
-  late String? op;
+  late double? n1 = null;
+  late double? n2 = null;
+  late String? op = null;
 
   Operation();
 
@@ -29,7 +31,7 @@ class Operation {
         clear();
         break;
 
-      case '*':
+      case 'x':
         result = n1! * n2!;
         clear();
         break;
@@ -62,6 +64,8 @@ class Calculator {
   }
 
   void setValue(String value) {
+    debugPrint(
+        '${operation.n1.toString()} ${operation.op.toString()} ${operation.n2.toString()}');
     if (error) {
       displayValue = '0';
       waitingNewValue = true;
@@ -72,7 +76,7 @@ class Calculator {
       switch (value) {
         case '+':
         case '-':
-        case '*':
+        case 'x':
         case '/':
           setOperation(value);
           break;
@@ -108,26 +112,45 @@ class Calculator {
   }
 
   void setNumber(String value) {
-    if (displayValue == '0' || waitingNewValue) {
-      displayValue = value;
+    if (displayValue.length < 12) {
+      if (displayValue == '0' || waitingNewValue) {
+        displayValue = value;
+      } else {
+        displayValue += value;
+      }
     } else {
-      displayValue += value;
+      if (waitingNewValue) {
+        displayValue = value;
+      }
     }
     waitingNewValue = false;
   }
 
   void addPoint() {
-    if (!displayValue.contains('.')) {
-      displayValue += '.';
+    if (displayValue.length < 12) {
+      if (waitingNewValue) {
+        displayValue = '0.';
+      } else if (!displayValue.contains('.')) {
+        displayValue += '.';
+      }
     }
     waitingNewValue = false;
   }
 
   void toggleSignal() {
-    if (double.parse(displayValue) > 0) {
-      displayValue = '-$displayValue';
-    } else if (double.parse(displayValue) < 0) {
-      displayValue = displayValue.substring(1);
+    if (displayValue.length < 13) {
+      if (waitingNewValue) {
+        displayValue = '0';
+      }
+      if (double.parse(displayValue) > 0) {
+        displayValue = '-$displayValue';
+      } else if (double.parse(displayValue) < 0) {
+        displayValue = displayValue.substring(1);
+      }
+    } else {
+      if (waitingNewValue) {
+        displayValue = '0';
+      }
     }
     waitingNewValue = false;
   }
@@ -155,6 +178,7 @@ class Calculator {
       operation.n2 = double.parse(displayValue);
       if (operation.op == null) {
         operation.op = op;
+        waitingNewValue = true;
       } else {
         getResult();
         operation.n1 = double.parse(displayValue);
@@ -171,6 +195,12 @@ class Calculator {
     }
     final double? result = operation.getResult();
     displayValue = result == null ? 'ERRO' : result.toString();
+    if (result != null && result - result.toInt() == 0) {
+      displayValue = displayValue.substring(0, displayValue.indexOf('.'));
+    }
+    if (displayValue.length >= 12) {
+      displayValue = displayValue.substring(0, 13);
+    }
     waitingNewValue = true;
   }
 }

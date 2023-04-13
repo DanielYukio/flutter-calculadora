@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'calculator_handle.dart';
+import 'package:flutter_calculadora/utils/calculator_utils.dart';
+import 'calculator_handler.dart';
 
 class CalculatorState extends StatefulWidget {
   const CalculatorState({super.key});
@@ -13,7 +14,7 @@ class _CalculatorState extends State<CalculatorState> {
 
   final buttons = [
     ['c', 'del', '%', '/'],
-    ['7', '8', '9', '*'],
+    ['7', '8', '9', 'x'],
     ['4', '5', '6', '-'],
     ['1', '2', '3', '+'],
     ['+/-', '0', '.', '='],
@@ -28,21 +29,28 @@ class _CalculatorState extends State<CalculatorState> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromARGB(221, 20, 33, 52),
       body: Center(
         child: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.9,
+          width: MediaQuery.of(context).size.width * 0.85,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Expanded(
+                child: Container(),
+              ),
               TextField(
                 textAlign: TextAlign.end,
                 decoration: InputDecoration(
-                  hintText: calculator.displayValue,
-                  border: const OutlineInputBorder(),
-                ),
+                    contentPadding: const EdgeInsets.only(right: 10),
+                    hintText: calculator.displayValue,
+                    hintStyle:
+                        const TextStyle(fontSize: 40, color: Colors.white),
+                    border: InputBorder.none),
+                cursorColor: Colors.white,
                 readOnly: true,
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 30),
               ...buttons.map(
                 (e) => Column(
                   children: [
@@ -50,29 +58,37 @@ class _CalculatorState extends State<CalculatorState> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: e
                           .map(
-                            (e) => ElevatedButton(
+                            (e) => TextButton(
                               autofocus: false,
                               onPressed: () {
                                 _onPressed(e);
                               },
                               style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.blue,
-                                  fixedSize: Size(
-                                    MediaQuery.of(context).size.width * 0.20,
-                                    MediaQuery.of(context).size.height * 0.06,
-                                  )),
+                                backgroundColor:
+                                    CalculatorStyles.backgroundColor(e),
+                                shape: const CircleBorder(),
+                                elevation: 10,
+                                fixedSize: Size(
+                                  MediaQuery.of(context).size.width * 0.18,
+                                  MediaQuery.of(context).size.width * 0.18,
+                                ),
+                              ),
                               child: Text(
                                 e.toUpperCase(),
-                                style: const TextStyle(fontSize: 20),
+                                style: TextStyle(
+                                  fontSize: CalculatorStyles.buttonTextSize(e),
+                                  color: CalculatorStyles.buttonTextColor(e),
+                                ),
                               ),
                             ),
                           )
                           .toList(),
                     ),
-                    const SizedBox(height: 16)
+                    const SizedBox(height: 10)
                   ].toList(),
                 ),
               ),
+              const SizedBox(height: 40)
             ],
           ),
         ),
