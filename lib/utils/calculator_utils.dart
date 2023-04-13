@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CalculatorStyles {
-  static Color backgroundColor(String value) {
+  static Color buttonBackgroundColor(String value) {
     switch (value) {
       case '+':
       case '-':
@@ -20,7 +20,28 @@ class CalculatorStyles {
     }
   }
 
-  static buttonTextColor(String value) {
+  static Color buttonForegroundColor(String value) {
+    switch (value) {
+      case 'c':
+      case 'del':
+        return Colors.red;
+
+      case '=':
+        return Colors.black;
+
+      case '+':
+      case '-':
+      case 'x':
+      case '/':
+      case '%':
+        return const Color.fromARGB(255, 29, 46, 72);
+
+      default:
+        return Colors.blue;
+    }
+  }
+
+  static Color buttonTextColor(String value) {
     switch (value) {
       case 'c':
       case 'del':

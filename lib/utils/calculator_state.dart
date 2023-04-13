@@ -65,7 +65,9 @@ class _CalculatorState extends State<CalculatorState> {
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor:
-                                    CalculatorStyles.backgroundColor(e),
+                                    CalculatorStyles.buttonBackgroundColor(e),
+                                foregroundColor:
+                                    CalculatorStyles.buttonForegroundColor(e),
                                 shape: const CircleBorder(),
                                 elevation: 10,
                                 fixedSize: Size(
