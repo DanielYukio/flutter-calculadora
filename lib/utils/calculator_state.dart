@@ -29,7 +29,7 @@ class _CalculatorState extends State<CalculatorState> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(221, 20, 33, 52),
+      backgroundColor: const Color.fromARGB(221, 20, 33, 52),
       body: Center(
         child: SizedBox(
           width: MediaQuery.of(context).size.width * 0.85,
