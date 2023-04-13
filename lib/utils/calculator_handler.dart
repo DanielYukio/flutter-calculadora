@@ -71,7 +71,7 @@ class Calculator {
       waitingNewValue = true;
     }
     if (double.tryParse(value) != null) {
-      setNumber(value);
+      printNumber(value);
     } else {
       switch (value) {
         case '+':
@@ -82,7 +82,7 @@ class Calculator {
           break;
 
         case '%':
-          displayValue = (double.parse(displayValue) / 100).toString();
+          divideBy100();
           break;
 
         case '=':
@@ -111,7 +111,7 @@ class Calculator {
     }
   }
 
-  void setNumber(String value) {
+  void printNumber(String value) {
     if (displayValue.length < 12) {
       if (displayValue == '0' || waitingNewValue) {
         displayValue = value;
@@ -126,8 +126,17 @@ class Calculator {
     waitingNewValue = false;
   }
 
+  void divideBy100() {
+    if (double.parse(displayValue) != 0) {
+      displayValue = (double.parse(displayValue) / 100).toString();
+      if (displayValue.length >= 12) {
+        displayValue = displayValue.substring(0, 12);
+      }
+    }
+  }
+
   void addPoint() {
-    if (displayValue.length < 12) {
+    if (displayValue.length < 13) {
       if (waitingNewValue) {
         displayValue = '0.';
       } else if (!displayValue.contains('.')) {
@@ -138,7 +147,7 @@ class Calculator {
   }
 
   void toggleSignal() {
-    if (displayValue.length < 13) {
+    if (displayValue.length < 13 || displayValue.startsWith('-')) {
       if (waitingNewValue) {
         displayValue = '0';
       }
@@ -163,6 +172,9 @@ class Calculator {
       if ((!displayValue.startsWith('-') && displayValue.length > 1) ||
           (displayValue.startsWith('-') && displayValue.length > 2)) {
         displayValue = displayValue.substring(0, displayValue.length - 1);
+        if (double.parse(displayValue) == 0 && displayValue.startsWith('-')) {
+          displayValue = '0';
+        }
       } else {
         displayValue = '0';
       }
