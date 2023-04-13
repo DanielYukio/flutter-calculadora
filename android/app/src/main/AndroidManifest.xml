@@ -2,7 +2,7 @@
     package="com.example.flutter_calculadora">
    <application
         android:label="Calculadora"
-        android:name="Flutter Calculadora"
+        android:name="Calculadora"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
