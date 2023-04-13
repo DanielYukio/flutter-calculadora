@@ -44,10 +44,11 @@ class _CalculatorState extends State<CalculatorState> {
                 decoration: InputDecoration(
                     contentPadding: const EdgeInsets.only(right: 10),
                     hintText: calculator.displayValue,
-                    hintStyle:
-                        const TextStyle(fontSize: 45, color: Colors.white),
+                    hintStyle: const TextStyle(
+                      fontSize: 45,
+                      color: Colors.white,
+                    ),
                     border: InputBorder.none),
-                cursorColor: Colors.white,
                 readOnly: true,
               ),
               const SizedBox(height: 30),
