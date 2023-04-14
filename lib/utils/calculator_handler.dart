@@ -64,8 +64,6 @@ class Calculator {
   }
 
   void setValue(String value) {
-    debugPrint(
-        '${operation.n1.toString()} ${operation.op.toString()} ${operation.n2.toString()}');
     if (error) {
       displayValue = '0';
       waitingNewValue = true;
