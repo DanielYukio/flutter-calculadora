@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class Operation {
-  late double? n1;
-  late double? n2;
-  late String? op;
+  late double? n1 = null;
+  late double? n2 = null;
+  late String? op = null;
 
   Operation();
 
