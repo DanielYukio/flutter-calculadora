@@ -34,7 +34,7 @@ class CalculatorStyles {
       case 'x':
       case '/':
       case '%':
-        return const Color.fromARGB(255, 29, 46, 72);
+        return const Color.fromARGB(255, 87, 185, 224);
 
       default:
         return Colors.blue;
